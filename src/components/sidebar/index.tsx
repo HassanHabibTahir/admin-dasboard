@@ -27,11 +27,11 @@ const Sidebar = ({
   const isDarkTheme = darkThemes.includes(theme);
   return (
     <div
-      // data-theme="forest"
+    data-theme={theme}
       className={classNames({
         " bg-base-200  text-zinc-50 fixed md:static md:translate-x-0 z-20":
           true,
-        "transition-all duration-300 ease-in-out": true,
+        "transition-all  ease-in-out": true,
         "w-[250px]": !collapsed,
         "w-0": collapsed,
         "-translate-x-full": !shown,

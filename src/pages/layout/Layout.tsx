@@ -11,10 +11,11 @@ const Layout = (props: PropsWithChildren) => {
     <div>
       <div
         className={classNames({
-          " flex min-h-screen": true,
+          "flex min-h-screen": true,
           "grid-cols-sidebar": !collapsed,
           "grid-cols-sidebar-collapsed": collapsed,
           "transition-[grid-template-columns] duration-300 ease-in-out": true,
+          
           flex: true,
         })}
       >
