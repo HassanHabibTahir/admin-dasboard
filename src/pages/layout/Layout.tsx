@@ -2,11 +2,21 @@
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import classNames from "classnames";
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 
 const Layout = (props: PropsWithChildren) => {
   const [collapsed, setSidebarCollapsed] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+  setMounted(true);
+}, []);
+
+
+if (!mounted) {
+  return <div></div>;
+}
+
   return (
     <div>
       <div

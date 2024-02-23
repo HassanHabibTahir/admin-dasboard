@@ -1,11 +1,11 @@
 "use client";
 import { Metadata } from "next";
-
+import { useTheme } from 'next-themes'
 import { Inter } from "next/font/google";
 import "./globals.css";
 import React, { useEffect } from "react";
 import Layout from "@/pages/layout/Layout";
-import useStore from "@/store/index";
+import { ThemeProvider } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,16 +19,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    useStore.persist.rehydrate();
-  }, []);
-
-  const { theme } = useStore((state: any) => state);
-
   return (
-    <html data-theme={theme} lang="en">
+    <html  lang="en">
       <body className={inter.className}>
+        <ThemeProvider>
         <Layout>{children}</Layout>
+        </ThemeProvider>
       </body>
     </html>
   );

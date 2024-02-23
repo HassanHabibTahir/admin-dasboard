@@ -8,13 +8,14 @@ import {
 } from "@heroicons/react/24/outline";
 import { defaultNavItems, NavItem } from "../navItem";
 import { darkLogo, darkThemes, lightLogo } from "@/assets";
-import useStore from "@/store/index";
+import { usePersistStore } from "@/store";
+import { useTheme } from "next-themes";
 type Props = {
   collapsed: boolean;
   navItems?: NavItem[];
   setCollapsed(collapsed: boolean): void;
   shown: boolean;
-};
+}; 
 const Sidebar = ({
   collapsed,
   navItems = defaultNavItems,
@@ -22,12 +23,12 @@ const Sidebar = ({
   setCollapsed,
 }: Props) => {
   const Icon = collapsed ? ChevronDoubleRightIcon : ChevronDoubleLeftIcon;
-  const { theme } = useStore((state: any) => state);
+  const { theme } = usePersistStore((state: any) => state);
+  const { resolvedTheme, setTheme } = useTheme()
+  const isDarkTheme = darkThemes.includes(resolvedTheme??'');
 
-  const isDarkTheme = darkThemes.includes(theme);
   return (
     <div
-    data-theme={theme}
       className={classNames({
         " bg-base-200  text-zinc-50 fixed md:static md:translate-x-0 z-20":
           true,
