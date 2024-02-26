@@ -6,37 +6,30 @@ import { usePersistStore } from "@/store";
 import { Constants } from "@/utils/constants";
 import { LANGUAGES } from "@/utils/enums";
 import { useTheme } from 'next-themes'
+import { ch ,en} from "@/assets";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { i18n } from "@/i18n.config";
+import { localeTranslations } from "@/utils";
+import Link from "next/link";
 type Props = {
   onMenuButtonClick(): void;
   setCollapsed(): void;
 };
 const Navbar = (props: Props) => {
-  
+    const pathName = usePathname();
   const { resolvedTheme, setTheme } = useTheme()
   const { theme,language, setLanguage } = usePersistStore((state: any) => state);
   const setSelectedTheme = async (t: string) => setTheme(t);
   const iconStyle = { width: 20, height: 20 };
-  // const init = React.useCallback(
-  //   async (text: string) => {
-  //     setTheme(text);
-  //   },
-  //   [setTheme]
-  // );
 
 
-
-
-
-
-// useEffect(() => {
-//   setMounted(true);
-// }, []);
-
-
-// if (!mounted) {
-//   return null;
-// }
-
+  const redirectedPathName = (locale: string) => {
+    if (!pathName) return "/";
+    const segments = pathName.split("/");
+    segments[1] = locale;
+    return segments.join("/");
+  };
 
 
   const ThemeItem = ({ th }: any) => (
@@ -132,30 +125,64 @@ const Navbar = (props: Props) => {
             tabIndex={-1}
             className="dropdown-content bg-base-200 text-base-content rounded-box top-px mt-16 max-h-[calc(100vh-10rem)] w-56 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5"
           >
-            <ul className="menu menu-sm gap-1">
-              {Constants.LANGUAGES?.map((lang: any) => (
-                <li key={lang?.key}>
-                  <div
-                    className="flex flex-row gap-4"
-                    // onClick={() => handleChangeLanguge(lang?.key)}
-                    onKeyDown={() => {}}
-                    tabIndex={-1}
-                    role="button"
-                  >
-                    {/* {lang?.key === LANGUAGES.ENGLISH && (
-                      <img src={imgUs} alt="" style={iconStyle} />
-                    )}
-                    {lang?.key === LANGUAGES.CHINESE && (
-                      <img src={imgCh} alt="" style={iconStyle} />
-                    )}
-                    <span className="capitalize">{lang?.label}</span>
-                    {language === lang?.key && (
-                      <CheckIcon style={iconStyle} />
-                    )} */}
-                  </div>
-                </li>
-              ))}
-            </ul>
+               <ul className="menu menu-sm gap-1">
+               {i18n?.locales?.map((locale, index) => {
+                  return (
+                    <>
+                      <li key={index}>
+                        <Link href={redirectedPathName(locale)}>
+                          <button className="active">
+                            <span className="badge badge-sm badge-outline !pl-1.5 !pr-1 pt-px font-mono !text-[.6rem] font-bold tracking-widest opacity-50">
+                              {locale}
+                            </span>{" "}
+                            <span className="font-[sans-serif]">
+                              {localeTranslations[locale]}
+                            </span>{" "}
+                          </button>{" "}
+                        </Link>
+                      </li>
+                    </>
+                  );
+                })}
+                {/* {Constants.LANGUAGES?.map((lang: any) => (
+                  <li key={lang?.key}>
+                    <div
+                      className="flex flex-row gap-4"
+                      onClick={() => handleChangeLanguge(lang?.key)}
+                      onKeyDown={() => {}}
+                      tabIndex={-1}
+                      role="button"
+                    >
+                     
+                      {lang?.key === LANGUAGES.ENGLISH && (
+                          <Image
+                          src={us}
+                          style={{
+                            width: "20px",
+                            height: "20px",
+                          }}
+                          alt=""
+                        />
+                      
+                      )}
+                      {lang?.key === LANGUAGES.CHINESE && (
+                         <Image
+                         src={ch}
+                         style={{
+                           width: "20px",
+                           height: "20px",
+                         }}
+                         alt=""
+                       />
+                      )}
+                      <span className="capitalize">{lang?.label}</span>
+                      {language === lang?.key && (
+                        <CheckIcon style={iconStyle} />
+                      )}
+                    </div>
+                  </li>
+                ))} */}
+              </ul>
           </div>
         </div>
       </div>

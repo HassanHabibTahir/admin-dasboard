@@ -1,8 +1,9 @@
 "use client";
-import Navbar from "@/components/navbar";
-import Sidebar from "@/components/sidebar";
+
 import classNames from "classnames";
 import React, { PropsWithChildren, useEffect, useState } from "react";
+import Sidebar from "./components/sidebar";
+import Navbar from "./components/navbar";
 
 const Layout = (props: PropsWithChildren) => {
   const [collapsed, setSidebarCollapsed] = useState(false);

@@ -39,6 +39,8 @@ export const Constants = {
     THEMES: () => [...Constants.DARK_THEMES, ...Constants.LIGHT_THEMES].sort(),
     LANGUAGES: [
       { key: "en", label: "English" },
-      { key: "ch", label: "Chinese" }
+      { key: "ch", label: "Chinese" },
+      {key:"ar",label:"عربي"}
+    
     ]
   };

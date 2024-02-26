@@ -6,7 +6,7 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
-import { defaultNavItems, NavItem } from "../navItem";
+import { defaultNavItems, NavItem } from './navItem';
 import { darkLogo, darkThemes, lightLogo } from "@/assets";
 import { usePersistStore } from "@/store";
 import { useTheme } from "next-themes";

@@ -1,29 +1,33 @@
-"use client";
+
 import { Metadata } from "next";
 import { useTheme } from 'next-themes'
 import { Inter } from "next/font/google";
 import "./globals.css";
 import React, { useEffect } from "react";
-import Layout from "@/pages/layout/Layout";
+import { Locale, i18n } from "@/i18n.config";
 import { ThemeProvider } from "./providers";
-
+import Layout from "./ui/Layout";
 const inter = Inter({ subsets: ["latin"] });
-
-// export const metadata: Metadata = {
-//   title: "XStore",
-//   description: "XStore is a top-notch high-tech online marketplace.",
-// };
-
+export const metadata: Metadata = {
+  title: "XStore",
+  description: "XStore is a top-notch high-tech online marketplace.",
+};
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ lang: locale }));
+}
 export default function RootLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: { lang: Locale };
 }) {
   return (
-    <html  lang="en">
+    <html   lang={params.lang}>
       <body className={inter.className}>
-        <ThemeProvider>
-        <Layout>{children}</Layout>
+         <ThemeProvider>
+       
+         <Layout>{children}</Layout>
         </ThemeProvider>
       </body>
     </html>
