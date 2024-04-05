@@ -1,36 +1,62 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { Bars3BottomLeftIcon, CheckIcon, ChevronDownIcon, LanguageIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3BottomLeftIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  LanguageIcon,
+  MoonIcon,
+  SunIcon,
+} from "@heroicons/react/24/outline";
 import { usePersistStore } from "@/store";
 import { Constants } from "@/utils/constants";
 import { LANGUAGES } from "@/utils/enums";
-import { useTheme } from 'next-themes'
-import { ch ,en} from "@/assets";
+import { useTheme } from "next-themes";
+import { ch, en } from "@/assets";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { i18n } from "@/i18n.config";
 import { localeTranslations } from "@/utils";
 import Link from "next/link";
+
 type Props = {
   onMenuButtonClick(): void;
   setCollapsed(): void;
 };
 const Navbar = (props: Props) => {
-    const pathName = usePathname();
-  const { resolvedTheme, setTheme } = useTheme()
-  const { theme,language, setLanguage } = usePersistStore((state: any) => state);
+  const pathName = usePathname();
+  const { resolvedTheme, setTheme } = useTheme();
+  const { theme, language, setLanguage } = usePersistStore(
+    (state: any) => state
+  );
   const setSelectedTheme = async (t: string) => setTheme(t);
   const iconStyle = { width: 20, height: 20 };
 
-
   const redirectedPathName = (locale: string) => {
     if (!pathName) return "/";
-    const segments = pathName.split("/");
-    segments[1] = locale;
-    return segments.join("/");
-  };
+    const pathNameisMissingLocal = i18n.locales.every(
+      (locale) =>
+        !pathName.startsWith(`/${locale}`) && pathName !== `/${locale}`
+    );
 
+    if (pathNameisMissingLocal) {
+      if (locale === i18n.defaultLocale) return pathName;
+      return `/${locale}${pathName}`;
+    } else {
+      if (locale === i18n.defaultLocale) {
+        const segments = pathName.split("/");
+        const isHome = segments.length === 2;
+        if (isHome) return "/";
+        segments.splice(1, 1);
+        return segments.join("/");
+      }
+      const segments = pathName.split("/");
+      segments[1] = locale;
+      return segments.join("/");
+    }
+
+  };
 
   const ThemeItem = ({ th }: any) => (
     <button
@@ -63,21 +89,20 @@ const Navbar = (props: Props) => {
     </button>
   );
 
-
   return (
     <nav
-    className={classNames({
-      "items-center": true,
-      "full md:w-full sticky z-10 shadow-sm h-[73px]": true
-    })}
-  >
-    <div className="navbar w-full bg-base-100">
-      {/* <IconButton
+      className={classNames({
+        "items-center": true,
+        "full md:w-full sticky z-10 shadow-sm h-[73px]": true,
+      })}
+    >
+      <div className="navbar w-full bg-base-100">
+        {/* <IconButton
         icon={<Bars3BottomLeftIcon style={iconStyle} />}
         clickHandler={() => props.setCollapsed()}
         className="ml-4"
       /> */}
-{/* 
+        {/* 
 <button
       aria-label='Toggle Dark Mode'
       type='button'
@@ -91,46 +116,47 @@ const Navbar = (props: Props) => {
       )}
     </button> */}
 
-
-      <div className="flex-1 ml-4 ">
-        <div className="text-xl sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
-          {process.env.REACT_APP_NAME}
+        <div className="flex-1 ml-4 ">
+          <div className="text-xl sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
+            {process.env.REACT_APP_NAME}
+          </div>
         </div>
-      </div>
-      <div className="flex-none">
-        <div className="dropdown">
-          <div className="dropdown-bottom dropdown-end">
+        <div className="flex-none">
+          <div className="dropdown">
+            <div className="dropdown-bottom dropdown-end">
+              <div tabIndex={-1} role="button" className="btn btn-ghost">
+                <span>theme</span>
+                <ChevronDownIcon style={iconStyle} />
+              </div>
+              <div
+                tabIndex={-1}
+                className="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[28.6rem] max-h-[calc(100vh-10rem)] w-56  overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5 "
+              >
+                <div className="grid grid-cols-1 gap-3 p-3">
+                  {Constants.THEMES().map((th: string) => (
+                    <ThemeItem th={th} key={th} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="dropdown dropdown-end">
             <div tabIndex={-1} role="button" className="btn btn-ghost">
-              <span>theme</span>
+              <LanguageIcon style={{ width: 20, height: 20 }} />
               <ChevronDownIcon style={iconStyle} />
             </div>
             <div
               tabIndex={-1}
-              className="dropdown-content bg-base-200 text-base-content rounded-box top-px h-[28.6rem] max-h-[calc(100vh-10rem)] w-56  overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5 "
+              className="dropdown-content bg-base-200 text-base-content rounded-box top-px mt-16 max-h-[calc(100vh-10rem)] w-56 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5"
             >
-              <div className="grid grid-cols-1 gap-3 p-3">
-                {Constants.THEMES().map((th: string) => (
-                  <ThemeItem th={th} key={th} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="dropdown dropdown-end">
-          <div tabIndex={-1} role="button" className="btn btn-ghost">
-            <LanguageIcon style={{ width: 20, height: 20 }} />
-            <ChevronDownIcon style={iconStyle} />
-          </div>
-          <div
-            tabIndex={-1}
-            className="dropdown-content bg-base-200 text-base-content rounded-box top-px mt-16 max-h-[calc(100vh-10rem)] w-56 overflow-y-auto border border-white/5 shadow-2xl outline outline-1 outline-black/5"
-          >
-               <ul className="menu menu-sm gap-1">
-               {i18n?.locales?.map((locale, index) => {
+              <ul className="menu menu-sm gap-1">
+                {i18n?.locales?.map((locale, index) => {
                   return (
                     <>
                       <li key={index}>
-                        <Link href={redirectedPathName(locale)}>
+                        <Link
+                          href={redirectedPathName(locale)}
+                        >
                           <button className="active">
                             <span className="badge badge-sm badge-outline !pl-1.5 !pr-1 pt-px font-mono !text-[.6rem] font-bold tracking-widest opacity-50">
                               {locale}
@@ -183,11 +209,11 @@ const Navbar = (props: Props) => {
                   </li>
                 ))} */}
               </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
   );
 };
 

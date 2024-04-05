@@ -5,7 +5,7 @@ import React, { PropsWithChildren, useEffect, useState } from "react";
 import Sidebar from "./components/sidebar";
 import Navbar from "./components/navbar";
 
-const Layout = (props: PropsWithChildren) => {
+const Layout = (props: any) => {
   const [collapsed, setSidebarCollapsed] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -34,6 +34,7 @@ if (!mounted) {
           collapsed={collapsed}
           setCollapsed={setSidebarCollapsed}
           shown={showSidebar}
+          lang={props?.lang}
         />
         <div className="w-full">
           <Navbar

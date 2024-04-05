@@ -1,3 +1,4 @@
+
 import React, { useRef } from "react";
 import classNames from "classnames";
 import Link from "next/link";
@@ -10,23 +11,28 @@ import { defaultNavItems, NavItem } from './navItem';
 import { darkLogo, darkThemes, lightLogo } from "@/assets";
 import { usePersistStore } from "@/store";
 import { useTheme } from "next-themes";
+import { getDictionary } from "@/lib/dictionary";
+import CustomLink from "../../components/Link";
 type Props = {
   collapsed: boolean;
   navItems?: NavItem[];
   setCollapsed(collapsed: boolean): void;
   shown: boolean;
+  lang:any
 }; 
-const Sidebar = ({
+const Sidebar = (  {
   collapsed,
   navItems = defaultNavItems,
   shown,
   setCollapsed,
+  lang
 }: Props) => {
   const Icon = collapsed ? ChevronDoubleRightIcon : ChevronDoubleLeftIcon;
   const { theme } = usePersistStore((state: any) => state);
   const { resolvedTheme, setTheme } = useTheme()
   const isDarkTheme = darkThemes.includes(resolvedTheme??'');
-
+  // const { navigation } =  getDictionary(lang)
+  // console.log(navigation , "navigation")
   return (
     <div
       className={classNames({
@@ -98,9 +104,12 @@ const Sidebar = ({
                       "rounded-full  mx-3 w-10": collapsed,
                     })}
                   >
-                    <Link href={item.href} className="flex gap-2">
-                      {item.icon} <span>{item.label}</span>
-                    </Link>
+                     <CustomLink href={item.href} lang={lang}>
+                     {item.icon} <span>{item.label}</span>
+                     </CustomLink>
+                    {/* <Link  className="flex gap-2">
+                    
+                    </Link> */}
                   </li>
                 );
               })}

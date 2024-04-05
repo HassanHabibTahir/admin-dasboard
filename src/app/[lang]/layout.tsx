@@ -22,12 +22,13 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { lang: Locale };
 }) {
+ 
   return (
     <html   lang={params.lang}>
       <body className={inter.className}>
          <ThemeProvider>
        
-         <Layout>{children}</Layout>
+         <Layout lang={params.lang}>{children}</Layout>
         </ThemeProvider>
       </body>
     </html>
